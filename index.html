@@ -1,1 +1,684 @@
 
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GHÉP NỐI DỮ LIỆU</title>
+<style>
+:root{
+  --bg:#2B0807;--panel:#4A120F;--panel2:#5B1712;--line:#8F3329;
+  --cyan:#FFD54A;--cyan2:#FFE58A;--violet:#D6A21E;--green:#F2C94C;
+  --red:#E05B4B;--amber:#FFD54A;--text:#FFFFFF;--muted:#E7CFC9;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;height:100%;background:
+radial-gradient(circle at 50% -20%,#7A2119 0,#4A120F 36%,#2B0807 78%);
+color:var(--text);font-family:Arial,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;
+ background-image:linear-gradient(#FFD54A18 1px,transparent 1px),linear-gradient(90deg,#FFD54A18 1px,transparent 1px);
+ background-size:38px 38px;mask-image:linear-gradient(to bottom,#000 0%,transparent 92%)
+}
+header{position:relative;z-index:20;background:#3A0D0BeF;border-bottom:1px solid #FFD54A66;backdrop-filter:blur(12px);padding:10px 18px 12px;flex-shrink:0}
+
+/* === HERO BANNER STYLING === */
+.bannerHero{
+  position:relative;
+  width:100%;
+  min-height:92px;
+  max-height:130px;
+  border-radius:10px;
+  overflow:hidden;
+  border:1.5px solid rgba(255,213,74,0.45);
+  background:radial-gradient(circle at 50% 30%, #851C15 0%, #4D110D 60%, #2A0806 100%);
+  box-shadow:0 4px 18px rgba(0,0,0,0.55), inset 0 0 25px rgba(255,213,74,0.12);
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all .25s ease;
+}
+.bannerHeroImg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  z-index:1;
+  display:none;
+}
+.bannerHeroImg.has-img{display:block}
+.bannerHeroFallback{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  min-height:92px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 24px;
+  box-sizing:border-box;
+  background-image:linear-gradient(90deg, rgba(74,18,15,0.7) 0%, transparent 22%, transparent 78%, rgba(74,18,15,0.7) 100%);
+}
+.bannerHeroFallback.hidden{display:none}
+.bannerEmblem{
+  flex:0 0 68px;
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  filter:drop-shadow(0 2px 8px rgba(255,213,74,0.4));
+}
+.bannerEmblem svg{width:60px;height:60px}
+.bannerContent{
+  flex:1;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+}
+.bannerSub{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(255,213,74,0.16);
+  border:1px solid rgba(255,213,74,0.38);
+  color:#FFE58A;
+  padding:3px 14px;
+  border-radius:20px;
+  font-size:clamp(11px,1.15vw,13.5px);
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+.bannerMain{
+  font-family:Arial,"Segoe UI",sans-serif;
+  font-size:clamp(16px,1.9vw,25px);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  color:#FFFFFF;
+  text-shadow:0 2px 6px rgba(0,0,0,0.8), 0 0 18px rgba(255,213,74,0.35);
+}
+.bannerHighlight{
+  color:#FFD54A;
+  text-shadow:0 0 16px rgba(255,213,74,0.6);
+}
+.bannerControls{
+  position:absolute;
+  top:8px;
+  right:10px;
+  z-index:10;
+  display:flex;
+  gap:6px;
+  opacity:0.35;
+  transition:opacity .2s;
+}
+.bannerHero:hover .bannerControls{opacity:1}
+.bannerBtn{
+  background:rgba(20,4,3,0.85);
+  border:1px solid rgba(255,213,74,0.4);
+  color:#FFE58A;
+  font-size:11px;
+  font-weight:800;
+  padding:4px 9px;
+  border-radius:6px;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  backdrop-filter:blur(6px);
+  transition:.15s;
+}
+.bannerBtn:hover{
+  background:#7A2119;
+  border-color:#FFD54A;
+  color:#FFF;
+  box-shadow:0 0 10px rgba(255,213,74,0.45);
+}
+
+.headerRow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.title{font-family:Arial,"Segoe UI",sans-serif;font-size:clamp(22px,2.2vw,32px);font-weight:900;letter-spacing:0;color:white;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
+.title span{color:#FFD54A;text-shadow:0 0 16px rgba(255,213,74,0.4)}
+.clock{min-width:170px;text-align:center;padding:6px 18px;border:1.5px solid #FFD54A;
+ background:linear-gradient(180deg,#6E1813,#450D0A);box-shadow:0 0 20px #FFD54A28,inset 0 0 15px #FFD54A18;
+ clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px);border-radius:4px}
+.clock small{display:block;font-family:Arial,"Segoe UI",sans-serif;font-size:10px;font-weight:700;color:#FFE58A;letter-spacing:1px}
+#timer{font-family:Arial,"Segoe UI",sans-serif;font-size:30px;font-weight:900;letter-spacing:1px;text-shadow:0 0 12px rgba(255,213,74,0.35)}
+
+/* === TOOLBAR REDESIGN: 3 CLUSTERS === */
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.toolCluster{
+ display:flex;align-items:center;gap:7px;background:rgba(42,9,7,0.72);
+ border:1px solid rgba(255,213,74,0.22);border-radius:10px;padding:5px 8px;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,0.08), 0 3px 10px rgba(0,0,0,0.35);
+ backdrop-filter:blur(6px);flex-wrap:wrap
+}
+.clusterLabel{
+ font-size:10px;font-weight:800;letter-spacing:1px;color:#FFD54A99;
+ text-transform:uppercase;padding:0 5px;display:flex;align-items:center;gap:4px;user-select:none
+}
+.vDivider{width:1px;height:24px;background:rgba(255,213,74,0.18);margin:0 2px}
+
+button,.tool,input,select{font:inherit}
+button,.tool{
+ border:1px solid #9A3D31;background:linear-gradient(180deg,#7A2119,#4B110E);
+ color:#FFFFFF;padding:7px 12px;border-radius:7px;font-weight:800;cursor:pointer;
+ transition:all .18s cubic-bezier(0.4,0,0.2,1);box-shadow:inset 0 0 12px #FFD54A0d, 0 2px 5px rgba(0,0,0,0.3);
+ font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:6px
+}
+button:hover,.tool:hover{border-color:#FFD54A;box-shadow:0 0 14px #FFD54A33;transform:translateY(-1.5px)}
+button:active{transform:translateY(0.5px)}
+
+/* NÚT BẮT ĐẦU - HERO ACTION */
+button.btnHero{
+ background:linear-gradient(135deg,#C22E22 0%,#8E1C15 100%);
+ border:1.5px solid #FFD54A;color:#FFFFFF;padding:7px 16px;
+ font-size:13.5px;letter-spacing:.3px;box-shadow:0 0 16px rgba(255,213,74,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+ text-shadow:0 1px 2px rgba(0,0,0,0.6)
+}
+button.btnHero:hover{background:linear-gradient(135deg,#D93528 0%,#A4221A 100%);box-shadow:0 0 22px rgba(255,213,74,0.55);transform:translateY(-1.5px) scale(1.02)}
+
+/* NÚT TẠM DỪNG */
+button.btnPause{background:linear-gradient(180deg,#6C1D17,#450E0B);border-color:#AB4437}
+
+/* NÚT ĐẶT LẠI - CẢNH BÁO TÁCH BIỆT */
+button.btnReset{
+ background:linear-gradient(180deg,#4E120E,#2E0806);border-color:#D9534F66;color:#FF9E96;font-size:12px;padding:7px 10px
+}
+button.btnReset:hover{border-color:#FF5A52;color:#FFF;background:linear-gradient(180deg,#701813,#450E0B);box-shadow:0 0 12px rgba(255,90,82,0.4)}
+
+/* NÚT CÔNG BỐ KẾT QUẢ - CLIMAX GOLD */
+button.btnResultClimax{
+ background:linear-gradient(135deg,#FFDF6D 0%,#FFD54A 45%,#D19B14 100%);
+ border:1.5px solid #FFF1A8;color:#450D0A;padding:7px 16px;font-weight:900;
+ font-size:13.5px;box-shadow:0 0 20px rgba(255,213,74,0.45), inset 0 1px 0 #FFF;
+ text-shadow:0 1px 0 rgba(255,255,255,0.4)
+}
+button.btnResultClimax:hover{
+ background:linear-gradient(135deg,#FFF2A1 0%,#FFDE68 45%,#E0A81E 100%);
+ box-shadow:0 0 28px rgba(255,213,74,0.7);transform:translateY(-1.5px) scale(1.02)
+}
+
+/* NÚT TRẢ LỜI */
+button.btnAnswer{border-color:#FFD54A88;background:linear-gradient(180deg,#6B1A14,#4A100D);color:#FFE58A}
+
+/* NÚT THỂ LỆ & TOÀN MÀN HÌNH */
+button.btnSecondary{background:linear-gradient(180deg,#551511,#360A08);border-color:#8F3329;color:#E7CFC9;font-size:12.5px}
+button.btnIconOnly{padding:7px 10px;font-size:14px}
+
+/* TOOL & INPUTS */
+.tool{cursor:default;padding:5px 9px;font-size:12px}
+.tool.interactive{cursor:pointer}
+.fileBadge{
+ max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ background:rgba(0,0,0,0.35);padding:4px 8px;border-radius:5px;
+ border:1px dashed rgba(255,213,74,0.35);color:#FFE58A;font-size:11.5px
+}
+.settingPill{
+ display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,0.35);
+ padding:3px 7px;border-radius:6px;border:1px solid rgba(255,213,74,0.2);color:#E7CFC9;font-size:11.5px;font-weight:700
+}
+input[type=number]{
+ width:52px;border:1px solid #FFD54A44;background:#1F0403;color:#FFD54A;
+ border-radius:5px;padding:3px 5px;text-align:center;font-weight:800;font-size:12.5px
+}
+input[type=number]:focus{outline:none;border-color:#FFD54A;box-shadow:0 0 8px #FFD54A44}
+input[type=file]{display:none}
+
+main{position:relative;z-index:2;max-width:1650px;width:100%;margin:auto;padding:12px 16px;flex:1;display:flex;flex-direction:column}
+.arena{display:grid;grid-template-columns:1fr 1fr;gap:18px;flex:1;min-height:480px}
+.column{
+ position:relative;overflow:hidden;border:1px solid #9A3D31;
+ background:linear-gradient(180deg,#5A1712f2,#3B0D0Af5);
+ clip-path:polygon(13px 0,100% 0,100% calc(100% - 13px),calc(100% - 13px) 100%,0 100%,0 13px);
+ box-shadow:inset 0 0 42px #FFD54A0a,0 0 30px #0008
+}
+.column.right{border-color:#D5A51F}
+.colHead{
+ position:absolute;z-index:8;left:0;right:0;top:0;height:48px;display:flex;align-items:center;justify-content:space-between;
+ padding:0 15px;background:#4A120Ff2;border-bottom:1px solid #FFD54A66;
+ font-family:Arial,"Segoe UI",sans-serif;font-size:13px;letter-spacing:.2px;color:#FFD54A
+}
+.right .colHead{color:#FFD54A;border-color:#FFD54A88}
+.live{font-size:10px}
+.scan{position:absolute;z-index:7;left:0;right:0;top:49px;height:2px;opacity:.45;background:linear-gradient(90deg,transparent,#FFD54A,transparent);box-shadow:0 0 14px #FFD54A;animation:scan 4.4s linear infinite}
+.right .scan{background:linear-gradient(90deg,transparent,#FFF4B8,transparent);box-shadow:0 0 14px #FFD54A}
+@keyframes scan{from{transform:translateY(0)}to{transform:translateY(72vh)}}
+.track{position:absolute;left:11px;right:11px;top:53px;will-change:transform}
+.card{min-height:68px;margin:8px 0;padding:9px 13px;display:flex;gap:12px;align-items:center;
+ border:1px solid #8F3329;background:linear-gradient(90deg,#661B15ee,#4A120Fee);
+ border-radius:8px;box-shadow:inset 3px 0 0 #FFD54A,0 5px 16px #0005;
+ font-size:clamp(14px,1.35vw,20px);line-height:1.3}
+.right .card{border-color:#C7951A;background:linear-gradient(90deg,#6B1F1Aee,#4B110Eee);box-shadow:inset 3px 0 0 #FFD54A,0 5px 16px #0005;color:#FFFFFF}
+.badge{flex:0 0 46px;height:46px;display:grid;place-items:center;font-family:Arial,"Segoe UI",sans-serif;font-size:20px;font-weight:800;letter-spacing:0;
+ border:1px solid #FFD54A;background:#7A2119;color:#FFD54A;
+ clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
+.right .badge{border-color:#FFD54A;background:#FFD54A;color:#6B1F1A;text-shadow:none}
+.modal{position:fixed;z-index:100;inset:0;background:#240605dd;backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:18px}
+.modal.show{display:flex}
+.modalBox{width:min(1000px,96vw);max-height:90vh;overflow:auto;background:linear-gradient(180deg,#5A1712,#2F0907);border:1px solid #FFD54A66;border-radius:13px;box-shadow:0 0 45px #000c}
+.modalHead{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;background:#4A120Ff5;border-bottom:1px solid #A94A3D}
+.modalHead h2{font-family:Arial,"Segoe UI",sans-serif;margin:0;font-size:18px;color:#FFE58A;letter-spacing:.3px;font-weight:800}
+.modalBody{padding:16px}
+.close{font-size:18px;padding:5px 10px}
+.rules{display:grid;gap:10px}
+.rule{border:1px solid #8F3329;background:#4A120F;padding:11px 13px;border-radius:9px;line-height:1.55}
+.rule b{color:#FFD54A}.scorePlus{color:#FFD54A;font-weight:900}.scoreMinus{color:#FF8A80;font-weight:900}
+.answerGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.answerRow{display:flex;gap:8px;align-items:center;border:1px solid #233b51;background:#071321;padding:8px;border-radius:8px}
+.answerRow label{width:38px;text-align:center;font-family:Arial,"Segoe UI",sans-serif;font-size:18px;font-weight:800;color:#FFD54A}
+.answerRow select{flex:1;background:#030b15;color:white;border:1px solid #334155;border-radius:6px;padding:8px}
+.modalActions{display:flex;justify-content:flex-end;gap:8px;margin-top:13px;flex-wrap:wrap}
+.scoreHero{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.stat{border:1px solid #8F3329;background:#4A120F;padding:13px;border-radius:9px;text-align:center}
+.stat b{display:block;font-family:Arial,"Segoe UI",sans-serif;font-size:24px;color:#FFD54A}.stat span{color:#8fb0c2;font-size:12px}
+.resultTable{width:100%;border-collapse:collapse;font-size:13px}.resultTable th,.resultTable td{border:1px solid #21374c;padding:8px;vertical-align:top}.resultTable th{background:#0d1b2d;color:#a5f3fc;position:sticky;top:51px}.ok{color:#FFD54A;font-weight:800}.bad{color:#FF8A80;font-weight:800}.none{color:#94a3b8}
+.fileName{max-width:210px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:1050px){.toolbar{justify-content:center}.toolCluster{flex-grow:1;justify-content:center}}
+@media(max-width:800px){.bannerEmblem{display:none}.bannerHero{min-height:75px}.arena{grid-template-columns:1fr;height:auto}.column{height:48vh}.scoreHero{grid-template-columns:1fr 1fr}.clock{min-width:130px}#timer{font-size:25px}}
+</style>
+</head>
+<body>
+<header>
+  <!-- BANNER KHUNG TO HOÀNH TRÁNG -->
+  <div class="bannerHero" id="bannerHero">
+    <img id="bannerImg" class="bannerHeroImg" alt="Banner cuộc thi">
+    
+    <!-- Đồ họa fallback khi chưa có ảnh -->
+    <div class="bannerHeroFallback" id="bannerFallback">
+      <div class="bannerEmblem">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="44" stroke="#FFD54A" stroke-width="2" stroke-dasharray="4 2" opacity="0.6"/>
+          <circle cx="50" cy="50" r="38" fill="url(#goldGrad)" opacity="0.15"/>
+          <circle cx="50" cy="50" r="38" stroke="#FFE58A" stroke-width="1.5"/>
+          <polygon points="50,22 58,38 76,40 62,53 66,71 50,62 34,71 38,53 24,40 42,38" fill="#FFD54A" stroke="#E69500" stroke-width="1"/>
+          <defs>
+            <radialGradient id="goldGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FFE58A"/>
+              <stop offset="100%" stop-color="#D6A21E"/>
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="bannerContent">
+        <div class="bannerSub">✦ ĐOÀN TNCS HỒ CHÍ MINH — CHI ĐOÀN D34A1 ✦</div>
+        <div class="bannerMain">
+          CUỘC THI TÌM HIỂU KIẾN THỨC <span class="bannerHighlight">TÂM LÝ HỌC XÃ HỘI</span>
+        </div>
+      </div>
+
+      <div class="bannerEmblem right">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="44" stroke="#FFD54A" stroke-width="2" stroke-dasharray="4 2" opacity="0.6"/>
+          <circle cx="50" cy="50" r="38" fill="url(#goldGrad2)" opacity="0.15"/>
+          <circle cx="50" cy="50" r="38" stroke="#FFE58A" stroke-width="1.5"/>
+          <polygon points="50,22 58,38 76,40 62,53 66,71 50,62 34,71 38,53 24,40 42,38" fill="#FFD54A" stroke="#E69500" stroke-width="1"/>
+          <defs>
+            <radialGradient id="goldGrad2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FFE58A"/>
+              <stop offset="100%" stop-color="#D6A21E"/>
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Nút tiện ích quản lý banner (Hover để đổi ảnh) -->
+    <div class="bannerControls">
+      <label for="bannerUpload" class="bannerBtn" title="Tải ảnh banner từ máy tính (.png, .jpg, .webp)">
+        🖼 Đổi ảnh banner
+      </label>
+      <input id="bannerUpload" type="file" accept="image/*" style="display:none">
+      <button class="bannerBtn" id="bannerResetBtn" title="Khôi phục banner mặc định" style="display:none">✕ Xóa ảnh</button>
+    </div>
+  </div>
+  <div class="headerRow">
+    <div class="title"><span>GHÉP NỐI</span> DỮ LIỆU</div>
+    <div class="clock"><small>TIME REMAINING</small><div id="timer">02:00</div></div>
+  </div>
+
+  <div class="toolbar">
+    <!-- CỤM 1: DỮ LIỆU & CẤU HÌNH -->
+    <div class="toolCluster">
+      <span class="clusterLabel">📁 DỮ LIỆU</span>
+      <label for="fileInput" class="tool interactive" title="Nhấn để nạp file Excel hoặc CSV">⬆ NẠP EXCEL</label>
+      <input id="fileInput" type="file" accept=".xlsx,.xls,.csv">
+      <span class="fileBadge" id="fileName" title="Tên bộ dữ liệu">DỮ LIỆU MẪU</span>
+
+      <div class="vDivider"></div>
+
+      <span class="clusterLabel">⚙ CÀI ĐẶT</span>
+      <label class="settingPill" title="Thời gian đếm ngược (phút)">
+        ⏱ PHÚT <input id="minutes" type="number" min="1" max="120" step="1" value="5">
+      </label>
+      <label class="settingPill" title="Tốc độ cuộn của 2 cột">
+        ⇅ TỐC ĐỘ <input id="speed" type="number" min="10" max="180" value="48">
+      </label>
+    </div>
+
+    <!-- CỤM 2: ĐIỀU KHIỂN TRẬN ĐẤU -->
+    <div class="toolCluster">
+      <span class="clusterLabel">⚡ ĐIỀU KHIỂN</span>
+      <button class="btnHero" id="startBtn" title="Bắt đầu trận đấu">▶ BẮT ĐẦU</button>
+      <button class="btnPause" id="pauseBtn" title="Tạm dừng / Tiếp tục">Ⅱ TẠM DỪNG</button>
+      <div class="vDivider"></div>
+      <button class="btnReset" id="resetBtn" title="Đặt lại trạng thái ban đầu">↻ ĐẶT LẠI</button>
+    </div>
+
+    <!-- CỤM 3: TÁC VỤ & KẾT QUẢ -->
+    <div class="toolCluster">
+      <span class="clusterLabel">🎯 KẾT QUẢ</span>
+      <button class="btnSecondary" id="rulesBtn" title="Xem thể lệ thi đấu">☰ THỂ LỆ</button>
+      <button class="btnAnswer" id="answersBtn" title="Mở phiếu trả lời">✎ PHIẾU TRẢ LỜI</button>
+      <button class="btnResultClimax" id="resultBtn" title="Chấm điểm và công bố kết quả">★ CÔNG BỐ KẾT QUẢ</button>
+      <button class="btnSecondary btnIconOnly" id="fullBtn" title="Bật / Tắt chế độ toàn màn hình">⛶</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="arena">
+    <div class="column" id="leftPanel">
+      <div class="colHead"><span>CỘT SỐ</span><span class="live">● LIVE</span></div>
+      <div class="scan"></div>
+      <div class="track" id="leftTrack"></div>
+    </div>
+    <div class="column right" id="rightPanel">
+      <div class="colHead"><span>CỘT CHỮ</span><span class="live">● LIVE</span></div>
+      <div class="scan"></div>
+      <div class="track" id="rightTrack"></div>
+    </div>
+  </section>
+</main>
+
+<!-- THỂ LỆ -->
+<div class="modal" id="rulesModal">
+  <div class="modalBox">
+    <div class="modalHead"><h2>THỂ LỆ TRÒ CHƠI</h2><button class="close" data-close="rulesModal">✕</button></div>
+    <div class="modalBody">
+      <div class="rules">
+        <div class="rule"><b>Mục tiêu:</b> theo dõi hai cột dữ liệu đang di chuyển, ghi nhớ và xác định cặp nội dung tương ứng.</div>
+        <div class="rule"><b>Cách trả lời:</b> trò chơi gồm <b>2 đội</b>. Hai đội có <b>5 phút</b> quan sát, ghi nhớ và <b>ghi rõ các đáp án ra giấy nháp</b>. Không bắt buộc mọi dữ liệu phải có cặp; nếu xác định không có phương án phù hợp, ghi <b>0</b>.</div>
+        <div class="rule"><b>Tính điểm:</b> mỗi đáp án đúng được <span class="scorePlus">+2 điểm</span>; mỗi đáp án sai bị <span class="scoreMinus">-1 điểm</span>; câu chưa trả lời tính <b>0 điểm</b>.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRẢ LỜI -->
+<div class="modal" id="answersModal">
+  <div class="modalBox">
+    <div class="modalHead"><h2>PHIẾU TRẢ LỜI</h2><button class="close" data-close="answersModal">✕</button></div>
+    <div class="modalBody">
+      <div class="answerGrid" id="answerGrid"></div>
+      <div class="modalActions"><button class="primary" data-close="answersModal">LƯU & ĐÓNG</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- KẾT QUẢ -->
+<div class="modal" id="resultModal">
+  <div class="modalBox">
+    <div class="modalHead"><h2>CÔNG BỐ KẾT QUẢ</h2><button class="close" data-close="resultModal">✕</button></div>
+    <div class="modalBody">
+      <div class="scoreHero">
+        <div class="stat"><b id="scoreTotal">0</b><span>TỔNG ĐIỂM</span></div>
+        <div class="stat"><b id="correctCount">0</b><span>ĐÚNG</span></div>
+        <div class="stat"><b id="wrongCount">0</b><span>SAI</span></div>
+        <div class="stat"><b id="blankCount">0</b><span>CHƯA TRẢ LỜI</span></div>
+      </div>
+      <div id="resultDetail"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+const BUILTIN = {"questions": [{"id": 1, "text": "Đại hội XIV", "answer": "T"}, {"id": 2, "text": "“Đảng có vững cách mệnh mới thành công” -", "answer": "H"}, {"id": 3, "text": "Đổi mới", "answer": "I"}, {"id": 4, "text": "“trên đầu lưỡi thì thừa nhận cách mạng mà trên thực tế thì từ bỏ cách mạng” -", "answer": "G"}, {"id": 5, "text": "Quan hệ đối tác chiến lược toàn diện với Việt Nam", "answer": "M"}, {"id": 6, "text": "“tự diễn biến”,", "answer": "D"}, {"id": 7, "text": "Tập trung dân chủ", "answer": "B"}, {"id": 8, "text": "“Đảng Cộng sản Việt Nam - Đội tiên phong của giai cấp công nhân, đồng thời là đội tiên phong của Nhân dân lao động và của dân tộc Việt Nam…” -", "answer": "E"}, {"id": 9, "text": "Tự phê bình và phê bình", "answer": "V"}, {"id": 10, "text": "Nghị quyết số 28-NQ/TW ngày 17/11/2022", "answer": "F"}, {"id": 11, "text": "Đại hội XI", "answer": "U"}, {"id": 12, "text": "Bình thường hóa quan hệ ngoại giao Việt Nam - Hoa Kỳ", "answer": "L"}, {"id": 13, "text": "Đảng Cộng sản Đông Dương cầm quyền", "answer": "C"}, {"id": 14, "text": "Kiên định mục tiêu độc lập dân tộc", "answer": "Q"}, {"id": 15, "text": "Vô sản tất cả các nước, đoàn kết lại!", "answer": "R"}, {"id": 16, "text": "Nhà nước", "answer": "S"}, {"id": 17, "text": "Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát,", "answer": "A"}, {"id": 18, "text": "Đoàn kết thống nhất", "answer": "0"}, {"id": 19, "text": "Đại hội XIII", "answer": "0"}, {"id": 20, "text": "Tự chỉ trích", "answer": "K"}, {"id": 21, "text": "Dân giàu, nước mạnh,", "answer": "O"}, {"id": 22, "text": "Nghị quyết số 44-NQ/TW ngày 24/11/2023", "answer": "N"}], "options": [{"key": "A", "text": "dân thụ hưởng"}, {"key": "B", "text": "là nguyên tắc cơ bản trong tổ chức và hoạt động của Đảng"}, {"key": "C", "text": "Năm 1945"}, {"key": "D", "text": "“tự chuyển hoá”"}, {"key": "E", "text": "Hiến pháp nước Cộng hòa XHCN Việt Nam"}, {"key": "F", "text": "về tiếp tục đổi mới phương thức lãnh đạo, cầm quyền của Đảng đối với hệ thống chính trị trong giai đoạn mới"}, {"key": "G", "text": "V.I Lênin"}, {"key": "H", "text": "Hồ Chí Minh"}, {"key": "I", "text": "Năm 1986"}, {"key": "J", "text": "Trường Chinh"}, {"key": "K", "text": "Nguyễn Văn Cừ"}, {"key": "L", "text": "Năm 1995"}, {"key": "M", "text": "15 quốc gia, tổ chức"}, {"key": "N", "text": "về Chiến lược bảo vệ Tổ quốc trong tình hình mới"}, {"key": "O", "text": "dân chủ, công bằng, văn minh."}, {"key": "P", "text": "10 quốc gia"}, {"key": "Q", "text": "và chủ nghĩa xã hội"}, {"key": "R", "text": "- Tuyên ngôn của đảng cộng sản - năm 1848"}, {"key": "S", "text": "là công cụ chủ yếu để Đảng lãnh đạo toàn xã hội sau khi đã trở thành đảng cầm quyền"}, {"key": "T", "text": "Năm 2026"}, {"key": "U", "text": "Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên chủ nghĩa xã hội (Bổ sung, phát triển năm 2011)"}, {"key": "V", "text": "nhằm giáo dục, rèn luyện đảng viên; chỉ ra những nguyên nhân dẫn đến sai lầm, khuyết điểm."}]};
+
+let questions=[], options=[], answers={};
+let running=false, paused=false, remain=120000, endAt=0, raf=null, last=0;
+let ly=0, ry=0, ld=1, rd=-1;
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const normAnswer=v=>{
+  let s=String(v??"").trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g,"_");
+  if(["0","KHONG_GHEP","KHONGGHEP","Ø","NONE","NO_MATCH","-"].includes(s)) return "__NONE__";
+  return s;
+};
+
+function setData(data,name){
+  questions=(data.questions||[]).map(q=>({id:String(q.id),text:String(q.text),answer:normAnswer(q.answer)}));
+  options=(data.options||[]).map(o=>({key:String(o.key).trim().toUpperCase(),text:String(o.text)}));
+  answers={};
+  $("fileName").textContent=name||"DỮ LIỆU";
+  buildArena();
+  buildAnswers();
+  resetClockOnly();
+}
+
+function buildArena(){
+  const qs=shuffle(questions), ops=shuffle(options);
+  $("leftTrack").innerHTML=qs.map(q=>`<div class="card"><span class="badge">${esc(q.id)}</span><span>${esc(q.text)}</span></div>`).join("");
+  $("rightTrack").innerHTML=ops.map(o=>`<div class="card"><span class="badge">${esc(o.key)}</span><span>${esc(o.text)}</span></div>`).join("");
+  ly=ry=0; ld=1; rd=-1;
+  $("leftTrack").style.transform="translateY(0px)";
+  $("rightTrack").style.transform="translateY(0px)";
+}
+
+function buildAnswers(){
+  const optHtml=options.map(o=>`<option value="${esc(o.key)}">${esc(o.key)}</option>`).join("");
+  $("answerGrid").innerHTML=questions.map(q=>`
+    <div class="answerRow">
+      <label>${esc(q.id)}</label>
+      <select data-qid="${esc(q.id)}">
+        <option value="">— CHƯA TRẢ LỜI —</option>
+        ${optHtml}
+        <option value="__NONE__">0</option>
+      </select>
+    </div>`).join("");
+  document.querySelectorAll("#answerGrid select").forEach(s=>{
+    s.addEventListener("change",()=>{answers[s.dataset.qid]=s.value});
+  });
+}
+
+function saveAnswerSelections(){
+  document.querySelectorAll("#answerGrid select").forEach(s=>answers[s.dataset.qid]=s.value);
+}
+
+function updateTimer(ms){
+  ms=Math.max(0,ms);
+  let total=Math.ceil(ms/1000), m=Math.floor(total/60), s=total%60;
+  $("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  $("timer").style.color=ms<=10000?"#fb7185":"#e6fbff";
+}
+function resetClockOnly(){
+  running=false; paused=false; cancelAnimationFrame(raf); last=0;
+  remain=Math.max(1,Number($("minutes").value)||5)*60000;
+  updateTimer(remain);
+}
+function bounds(panel,track){return Math.max(0,track.scrollHeight-(panel.clientHeight-58))}
+function animate(ts){
+  if(!running||paused)return;
+  if(!last)last=ts;
+  const dt=Math.min(.05,(ts-last)/1000); last=ts;
+  const sp=Math.max(10,Number($("speed").value)||48);
+  const lb=bounds($("leftPanel"),$("leftTrack")), rb=bounds($("rightPanel"),$("rightTrack"));
+  ly+=ld*sp*dt; ry+=rd*sp*1.12*dt;
+  if(ly>=lb){ly=lb;ld=-1} if(ly<=0){ly=0;ld=1}
+  if(ry>=rb){ry=rb;rd=-1} if(ry<=0){ry=0;rd=1}
+  $("leftTrack").style.transform=`translateY(${-ly}px)`;
+  $("rightTrack").style.transform=`translateY(${-ry}px)`;
+  remain=endAt-performance.now(); updateTimer(remain);
+  if(remain<=0){running=false;paused=false;updateTimer(0);document.body.animate([{filter:"brightness(1)"},{filter:"brightness(1.65)"},{filter:"brightness(1)"}],{duration:650});return}
+  raf=requestAnimationFrame(animate);
+}
+
+function openModal(id){$(id).classList.add("show")}
+function closeModal(id){$(id).classList.remove("show")}
+
+function publishResult(){
+  saveAnswerSelections();
+  let correct=0,wrong=0,blank=0,total=0,detail=[];
+  for(const q of questions){
+    const chosen=answers[q.id]||"";
+    let pts=0,status="";
+    if(!chosen){blank++;pts=0;status="CHƯA TRẢ LỜI"}
+    else if(chosen===q.answer){correct++;pts=2;status="ĐÚNG"}
+    else{wrong++;pts=-1;status="SAI"}
+    total+=pts;
+    detail.push({q,chosen,pts,status});
+  }
+  $("scoreTotal").textContent=total;
+  $("correctCount").textContent=correct;
+  $("wrongCount").textContent=wrong;
+  $("blankCount").textContent=blank;
+
+  const showAns=v=>v==="__NONE__"?"0":v||"—";
+  $("resultDetail").innerHTML=`<table class="resultTable">
+    <thead><tr><th>STT</th><th>Nội dung</th><th>Trả lời</th><th>Đáp án đúng</th><th>Kết quả</th><th>Điểm</th></tr></thead>
+    <tbody>${detail.map(r=>`<tr>
+      <td>${esc(r.q.id)}</td><td>${esc(r.q.text)}</td><td>${esc(showAns(r.chosen))}</td>
+      <td>${esc(showAns(r.q.answer))}</td>
+      <td class="${r.status==="ĐÚNG"?"ok":r.status==="SAI"?"bad":"none"}">${r.status}</td>
+      <td class="${r.pts>0?"ok":r.pts<0?"bad":"none"}">${r.pts>0?"+":""}${r.pts}</td>
+    </tr>`).join("")}</tbody></table>`;
+  openModal("resultModal");
+}
+
+function parseRows(rows){
+  rows=rows.filter(r=>r && r.some(v=>String(v??"").trim()!==""));
+  if(rows.length<2) throw new Error("File không có dữ liệu.");
+  const first=rows[0].map(v=>String(v??"").trim().toUpperCase());
+  const hasHeader=first.includes("STT") || first.includes("NOI_DUNG_COT_SO") || first.includes("DAP_AN_DUNG");
+  const data=hasHeader?rows.slice(1):rows;
+  const qs=[], ops=[];
+  for(const r of data){
+    if(String(r[0]??"").trim() && String(r[1]??"").trim()){
+      qs.push({id:String(r[0]).trim(),text:String(r[1]).trim(),answer:String(r[2]??"").trim()});
+    }
+    if(String(r[3]??"").trim() && String(r[4]??"").trim()){
+      ops.push({key:String(r[3]).trim(),text:String(r[4]).trim()});
+    }
+  }
+  if(!qs.length || !ops.length) throw new Error("Cần đủ 5 cột A–E theo file Excel mẫu.");
+  return {questions:qs,options:ops};
+}
+
+$("fileInput").addEventListener("change",async e=>{
+  const f=e.target.files[0]; if(!f)return;
+  try{
+    if(f.name.toLowerCase().endsWith(".csv")){
+      const text=await f.text();
+      const rows=text.split(/\r?\n/).map(line=>line.split(/[,;\t]/));
+      setData(parseRows(rows),f.name);
+      return;
+    }
+    if(typeof XLSX==="undefined") throw new Error("Không tải được thư viện đọc Excel. Hãy kết nối Internet hoặc dùng CSV.");
+    const buf=await f.arrayBuffer(), wb=XLSX.read(buf,{type:"array"});
+    const sheetName=wb.SheetNames.includes("DU_LIEU")?"DU_LIEU":wb.SheetNames[0];
+    const rows=XLSX.utils.sheet_to_json(wb.Sheets[sheetName],{header:1,defval:""});
+    setData(parseRows(rows),f.name);
+  }catch(err){alert("Không đọc được file: "+err.message)}
+});
+
+$("startBtn").onclick=()=>{
+  if(running&&paused){paused=false;endAt=performance.now()+remain;last=0;raf=requestAnimationFrame(animate);return}
+  if(running)return;
+  remain=Math.max(1,Number($("minutes").value)||5)*60000;
+  endAt=performance.now()+remain;running=true;paused=false;last=0;raf=requestAnimationFrame(animate);
+};
+$("pauseBtn").onclick=()=>{
+  if(!running)return;
+  if(!paused){paused=true;remain=endAt-performance.now();cancelAnimationFrame(raf)}
+  else{paused=false;endAt=performance.now()+remain;last=0;raf=requestAnimationFrame(animate)}
+};
+$("resetBtn").onclick=()=>{
+  if(running || Object.keys(answers).length > 0){
+    if(!confirm("Bạn có chắc chắn muốn đặt lại toàn bộ trò chơi? (Thời gian và phiếu trả lời sẽ bị xoá)")) return;
+  }
+  answers={}; buildArena(); buildAnswers(); resetClockOnly();
+};
+$("minutes").addEventListener("change",()=>{if(!running)resetClockOnly()});
+$("rulesBtn").onclick=()=>openModal("rulesModal");
+$("answersBtn").onclick=()=>{
+  document.querySelectorAll("#answerGrid select").forEach(s=>{s.value=answers[s.dataset.qid]||""});
+  openModal("answersModal");
+};
+$("resultBtn").onclick=publishResult;
+$("fullBtn").onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{
+  if(b.dataset.close==="answersModal") saveAnswerSelections();
+  closeModal(b.dataset.close);
+});
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModal(m.id)}));
+
+// === BANNER LOGIC: TẢI & LƯU ẢNH BANNER ===
+const bannerImg = $("bannerImg"), bannerFallback = $("bannerFallback"), bannerResetBtn = $("bannerResetBtn");
+
+function applyBanner(src){
+  if(src){
+    bannerImg.src = src;
+    bannerImg.classList.add("has-img");
+    bannerFallback.classList.add("hidden");
+    bannerResetBtn.style.display = "inline-flex";
+  }else{
+    bannerImg.src = "";
+    bannerImg.classList.remove("has-img");
+    bannerFallback.classList.remove("hidden");
+    bannerResetBtn.style.display = "none";
+  }
+}
+
+const savedBanner = localStorage.getItem("ghepnoi_custom_banner");
+if(savedBanner){
+  applyBanner(savedBanner);
+}else{
+  const testImg = new Image();
+  testImg.onload = ()=>{ applyBanner("banner.png"); };
+  testImg.onerror = ()=>{
+    const testJpg = new Image();
+    testJpg.onload = ()=>{ applyBanner("banner.jpg"); };
+    testJpg.onerror = ()=>{ applyBanner(null); };
+    testJpg.src = "banner.jpg";
+  };
+  testImg.src = "banner.png";
+}
+
+$("bannerUpload").addEventListener("change", e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    const dataUrl = ev.target.result;
+    try {
+      localStorage.setItem("ghepnoi_custom_banner", dataUrl);
+    } catch(err){
+      console.warn("Ảnh lớn vượt dung lượng localStorage, hiển thị trực tiếp cho phiên này.");
+    }
+    applyBanner(dataUrl);
+  };
+  reader.readAsDataURL(file);
+});
+
+bannerResetBtn.onclick = ()=>{
+  localStorage.removeItem("ghepnoi_custom_banner");
+  applyBanner(null);
+  $("bannerUpload").value = "";
+};
+
+setData(BUILTIN,"DỮ LIỆU MẪU");
+</script>
+</body>
+</html>
